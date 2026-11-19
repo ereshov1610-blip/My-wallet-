@@ -1,0 +1,231 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User financial preferences, currency exchange rates, and monthly targets",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Firebase Auth UID of the owner" },
+        "displayName": { "type": "string", "description": "User display name" },
+        "email": { "type": "string", "description": "User email address" },
+        "primaryCurrency": { "type": "string", "enum": ["TRY", "USD", "TMT", "EUR"] },
+        "monthlyIncomeGoal": { "type": "number", "description": "Monthly income target in primary currency" },
+        "monthlyBudgetLimit": { "type": "number", "description": "Overall monthly spending budget limit" },
+        "rateTryToUsd": { "type": "number", "description": "TRY per 1 USD conversion rate" },
+        "rateTmtToUsd": { "type": "number", "description": "TMT per 1 USD conversion rate" },
+        "rateEurToUsd": { "type": "number", "description": "EUR per 1 USD conversion rate" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp on create" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp on update" }
+      },
+      "required": [
+        "userId", "displayName", "primaryCurrency", "monthlyIncomeGoal",
+        "monthlyBudgetLimit", "rateTryToUsd", "rateTmtToUsd", "rateEurToUsd",
+        "createdAt", "updatedAt"
+      ]
+    },
+    "WorkShift": {
+      "title": "WorkShift",
+      "description": "Recorded work shift with start/end times, overnight flag, and hourly or fixed pay",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "dateIso": { "type": "string", "description": "Shift date in YYYY-MM-DD" },
+        "companyName": { "type": "string" },
+        "startTime": { "type": "string", "description": "HH:mm 24h format" },
+        "endTime": { "type": "string", "description": "HH:mm 24h format" },
+        "overnight": { "type": "boolean" },
+        "durationMinutes": { "type": "integer" },
+        "payType": { "type": "string", "enum": ["HOURLY", "FIXED"] },
+        "rateOrFixedAmount": { "type": "number" },
+        "totalEarnings": { "type": "number" },
+        "currency": { "type": "string", "enum": ["TRY", "USD", "TMT", "EUR"] },
+        "notes": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "userId", "dateIso", "companyName", "startTime", "endTime",
+        "overnight", "durationMinutes", "payType", "rateOrFixedAmount",
+        "totalEarnings", "currency", "createdAt", "updatedAt"
+      ]
+    },
+    "ExpenseRecord": {
+      "title": "ExpenseRecord",
+      "description": "Individual expense transaction linked to a category",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "dateIso": { "type": "string" },
+        "amount": { "type": "number" },
+        "currency": { "type": "string", "enum": ["TRY", "USD", "TMT", "EUR"] },
+        "categoryId": { "type": "string" },
+        "categoryName": { "type": "string" },
+        "description": { "type": "string" },
+        "recurringId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "userId", "dateIso", "amount", "currency", "categoryId",
+        "categoryName", "createdAt", "updatedAt"
+      ]
+    },
+    "ExpenseCategory": {
+      "title": "ExpenseCategory",
+      "description": "User expense category with icon and color",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "iconKey": { "type": "string" },
+        "colorHex": { "type": "integer" },
+        "defaultKey": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "name", "iconKey", "colorHex", "createdAt", "updatedAt"]
+    },
+    "SavingsGoal": {
+      "title": "SavingsGoal",
+      "description": "Savings target with accumulated balance",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "targetAmount": { "type": "number" },
+        "currentAmount": { "type": "number" },
+        "currency": { "type": "string", "enum": ["TRY", "USD", "TMT", "EUR"] },
+        "targetDateIso": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "userId", "title", "targetAmount", "currentAmount",
+        "currency", "createdAt", "updatedAt"
+      ]
+    },
+    "SavingsTransfer": {
+      "title": "SavingsTransfer",
+      "description": "Record of money transferred into a savings goal",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "goalId": { "type": "string" },
+        "goalTitle": { "type": "string" },
+        "amount": { "type": "number" },
+        "currency": { "type": "string", "enum": ["TRY", "USD", "TMT", "EUR"] },
+        "dateIso": { "type": "string" },
+        "note": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "userId", "goalId", "goalTitle", "amount", "currency",
+        "dateIso", "createdAt", "updatedAt"
+      ]
+    },
+    "DebtRecord": {
+      "title": "DebtRecord",
+      "description": "Money owed by user or owed to user with partial payment tracking",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "direction": { "type": "string", "enum": ["I_OWE", "OWED_TO_ME"] },
+        "personName": { "type": "string" },
+        "totalAmount": { "type": "number" },
+        "paidAmount": { "type": "number" },
+        "currency": { "type": "string", "enum": ["TRY", "USD", "TMT", "EUR"] },
+        "dateIso": { "type": "string" },
+        "dueDateIso": { "type": "string" },
+        "status": { "type": "string", "enum": ["UNPAID", "PARTIAL", "PAID"] },
+        "note": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "userId", "direction", "personName", "totalAmount", "paidAmount",
+        "currency", "dateIso", "status", "createdAt", "updatedAt"
+      ]
+    },
+    "RecurringExpense": {
+      "title": "RecurringExpense",
+      "description": "Scheduled recurring bill or subscription",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "amount": { "type": "number" },
+        "currency": { "type": "string", "enum": ["TRY", "USD", "TMT", "EUR"] },
+        "categoryId": { "type": "string" },
+        "categoryName": { "type": "string" },
+        "frequency": { "type": "string", "enum": ["WEEKLY", "MONTHLY", "YEARLY"] },
+        "nextDueDateIso": { "type": "string" },
+        "active": { "type": "boolean" },
+        "note": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "userId", "title", "amount", "currency", "categoryId", "categoryName",
+        "frequency", "nextDueDateIso", "active", "createdAt", "updatedAt"
+      ]
+    },
+    "CategoryBudget": {
+      "title": "CategoryBudget",
+      "description": "Monthly spending limit for a specific expense category",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "categoryId": { "type": "string" },
+        "categoryName": { "type": "string" },
+        "limitAmount": { "type": "number" },
+        "currency": { "type": "string", "enum": ["TRY", "USD", "TMT", "EUR"] },
+        "monthKey": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "userId", "categoryId", "categoryName", "limitAmount",
+        "currency", "monthKey", "createdAt", "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "User financial preferences and exchange rates"
+    },
+    "/users/{userId}/workShifts/{shiftId}": {
+      "schema": { "$ref": "#/entities/WorkShift" },
+      "description": "User work shifts and earnings"
+    },
+    "/users/{userId}/expenses/{expenseId}": {
+      "schema": { "$ref": "#/entities/ExpenseRecord" },
+      "description": "User expense transactions"
+    },
+    "/users/{userId}/categories/{categoryId}": {
+      "schema": { "$ref": "#/entities/ExpenseCategory" },
+      "description": "User expense categories"
+    },
+    "/users/{userId}/savingsGoals/{goalId}": {
+      "schema": { "$ref": "#/entities/SavingsGoal" },
+      "description": "User savings goals"
+    },
+    "/users/{userId}/savingsTransfers/{transferId}": {
+      "schema": { "$ref": "#/entities/SavingsTransfer" },
+      "description": "User savings transfer logs"
+    },
+    "/users/{userId}/debts/{debtId}": {
+      "schema": { "$ref": "#/entities/DebtRecord" },
+      "description": "User debt tracking records"
+    },
+    "/users/{userId}/recurringExpenses/{recurringId}": {
+      "schema": { "$ref": "#/entities/RecurringExpense" },
+      "description": "User recurring bills and subscriptions"
+    },
+    "/users/{userId}/categoryBudgets/{budgetId}": {
+      "schema": { "$ref": "#/entities/CategoryBudget" },
+      "description": "User monthly category budgets"
+    }
+  }
+}
